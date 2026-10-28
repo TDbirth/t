@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Happy Birthday Tenuka Dihansa | Sweet 16</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    :root {
+      --bg: #030712;
+      --card-bg: rgba(15, 23, 42, 0.85);
+      --cyan: #00f3ff;
+      --magenta: #ff007f;
+      --purple: #a855f7;
+      --gold: #fbbf24;
+      --text: #f8fafc;
+      --font-main: 'Outfit', sans-serif;
+      --font-num: 'Space Grotesk', sans-serif;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font-main);
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    /* Fast Canvas Overlay */
+    #fxCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* Container */
+    .container {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 650px;
+      margin: 0 auto;
+      padding: 1rem;
+    }
+
+    /* FIRST SCREEN (Hero - Instant Visual Impact) */
+    .hero {
+      min-height: 95vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      position: relative;
+    }
+
+    /* Top Badge */
+    .hero-badge {
+      display: inline-block;
+      padding: 0.5rem 1.2rem;
+      background: linear-gradient(90deg, rgba(0, 243, 255, 0.15), rgba(255, 0, 127, 0.15));
+      border: 1.5px solid var(--cyan);
+      border-radius: 50px;
+      font-size: clamp(0.8rem, 3.5vw, 1rem);
+      font-weight: 700;
+      color: var(--cyan);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      box-shadow: 0 0 20px rgba(0, 243, 255, 0.4);
+      animation: flashPulse 1.2s infinite alternate;
+      margin-bottom: 1rem;
+    }
+
+    /* Big Main Title */
+    .main-title {
+      font-size: clamp(2rem, 7.5vw, 3.8rem);
+      font-weight: 900;
+      line-height: 1.1;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, #ffffff 0%, var(--cyan) 50%, var(--magenta) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 0 15px rgba(0, 243, 255, 0.5));
+    }
+
+    .name-title {
+      display: block;
+      font-size: clamp(2.4rem, 9vw, 4.5rem);
+      font-weight: 900;
+      color: #fff;
+      text-shadow: 0 0 20px var(--cyan), 0 0 35px var(--magenta);
+      margin-top: 0.3rem;
+      letter-spacing: -0.5px;
+    }
+
+    /* Giant 16 Emblem */
+    .badge-16-wrapper {
+      margin: 2rem 0;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .badge-16 {
+      width: clamp(140px, 42vw, 190px);
+      height: clamp(140px, 42vw, 190px);
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(168, 85, 247, 0.3) 0%, rgba(3, 7, 18, 0.9) 75%);
+      border: 3px solid var(--cyan);
+      box-shadow: 0 0 35px rgba(0, 243, 255, 0.6), inset 0 0 25px rgba(255, 0, 127, 0.5);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      animation: fastSpinGlow 2s infinite linear alternate;
+    }
+
+    .badge-16 .number {
+      font-family: var(--font-num);
+      font-size: clamp(4rem, 15vw, 5.8rem);
+      font-weight: 900;
+      line-height: 1;
+      background: linear-gradient(180deg, #ffffff, var(--cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 0 10px var(--cyan));
+    }
+
+    .badge-16 .years {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 3px;
+      color: var(--magenta);
+      text-transform: uppercase;
+    }
+
+    /* Scroll Down Indicator */
+    .scroll-indicator {
+      margin-top: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      animation: bounce 1.2s infinite;
+    }
+
+    .scroll-indicator svg {
+      width: 24px;
+      height: 24px;
+      fill: var(--cyan);
+    }
+
+    /* SECOND SCREEN (Stats - Scroll Only) */
+    .stats-section {
+      padding: 3rem 0 2rem 0;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.5s ease-out;
+    }
+
+    .stats-section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .stats-title {
+      text-align: center;
+      font-size: 1.4rem;
+      font-weight: 900;
+      color: var(--cyan);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 1.5rem;
+      text-shadow: 0 0 10px var(--cyan);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+
+    .stat-box {
+      background: var(--card-bg);
+      border: 1.5px solid rgba(0, 243, 255, 0.3);
+      padding: 1.2rem 0.8rem;
+      border-radius: 16px;
+      text-align: center;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    .stat-value {
+      font-family: var(--font-num);
+      font-size: clamp(1.6rem, 5.5vw, 2.3rem);
+      font-weight: 900;
+      color: #fff;
+      text-shadow: 0 0 12px var(--magenta);
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.8);
+      text-transform: uppercase;
+      margin-top: 0.3rem;
+      letter-spacing: 1px;
+      font-weight: 700;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2.5rem 0 1.5rem 0;
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.5);
+      font-weight: 700;
+    }
+
+    /* KEYFRAMES FOR INSTANT ANIMATIONS */
+    @keyframes flashPulse {
+      0% { transform: scale(1); box-shadow: 0 0 15px rgba(0, 243, 255, 0.4); }
+      100% { transform: scale(1.05); box-shadow: 0 0 30px rgba(255, 0, 127, 0.8); }
+    }
+
+    @keyframes fastSpinGlow {
+      0% { border-color: var(--cyan); box-shadow: 0 0 30px rgba(0, 243, 255, 0.7); }
+      50% { border-color: var(--magenta); box-shadow: 0 0 45px rgba(255, 0, 127, 0.8); }
+      100% { border-color: var(--purple); box-shadow: 0 0 30px rgba(168, 85, 247, 0.7); }
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Instant Animation Canvas -->
+  <canvas id="fxCanvas"></canvas>
+
+  <div class="container">
+    
+    <!-- HERO SECTION (First Viewport) -->
+    <section class="hero">
+      
+      <div class="hero-badge">SWEET 16 CELEBRATION</div>
+
+      <h1 class="main-title">
+        HAPPY BIRTHDAY
+        <span class="name-title">TENUKA DIHANSA</span>
+      </h1>
+
+      <div class="badge-16-wrapper">
+        <div class="badge-16">
+          <span class="number">16</span>
+          <span class="years">YEARS OLD</span>
+        </div>
+      </div>
+
+      <div class="scroll-indicator">
+        <span>SCROLL DOWN</span>
+        <svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg>
+      </div>
+
+    </section>
+
+    <!-- STATS SECTION (Appears on Scroll Only) -->
+    <section class="stats-section" id="statsSec">
+      <h2 class="stats-title">AGE BREAKDOWN</h2>
+      
+      <div class="stats-grid">
+        <div class="stat-box">
+          <div class="stat-value" id="valDays">5,844</div>
+          <div class="stat-label">Days</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value" id="valWeeks">834</div>
+          <div class="stat-label">Weeks</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value" id="valMonths">192</div>
+          <div class="stat-label">Months</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value" id="valHours">140,256</div>
+          <div class="stat-label">Hours</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value" id="valMins">8,415,360</div>
+          <div class="stat-label">Minutes</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value" id="valSecs">504,921,600</div>
+          <div class="stat-label">Seconds</div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      CELEBRATING TENUKA DIHANSA • 16TH BIRTHDAY
+    </footer>
+
+  </div>
+
+  <script>
+    // Ultra-Fast Fireworks & Confetti Canvas Engine
+    const canvas = document.getElementById('fxCanvas');
+    const ctx = canvas.getContext('2d');
+
+    let w, h;
+    let particles = [];
+
+    function resize() {
+      w = canvas.width = window.innerWidth;
+      h = canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    class Particle {
+      constructor(x, y, isRocket = false) {
+        this.x = x || Math.random() * w;
+        this.y = y || (isRocket ? h : Math.random() * (h * 0.6));
+        this.isRocket = isRocket;
+        
+        if (isRocket) {
+          this.vx = (Math.random() - 0.5) * 3;
+          this.vy = -(Math.random() * 6 + 10); // Super fast rocket launch
+          this.color = '#00f3ff';
+          this.size = 3;
+        } else {
+          const angle = Math.random() * Math.PI * 2;
+          const speed = Math.random() * 7 + 2;
+          this.vx = Math.cos(angle) * speed;
+          this.vy = Math.sin(angle) * speed;
+          this.color = `hsl(${Math.random() * 360}, 100%, 60%)`;
+          this.size = Math.random() * 3 + 1.5;
+        }
+
+        this.alpha = 1;
+        this.decay = Math.random() * 0.025 + 0.015;
+      }
+
+      update() {
+        if (this.isRocket) {
+          this.x += this.vx;
+          this.y += this.vy;
+          if (this.vy < -2) this.vy += 0.15;
+          if (Math.random() < 0.08 || this.y < h * 0.3) {
+            this.explode();
+            return true;
+          }
+          return false;
+        }
+
+        this.x += this.vx;
+        this.y += this.vy;
+        this.vy += 0.08; // gravity
+        this.alpha -= this.decay;
+        return this.alpha <= 0;
+      }
+
+      draw() {
+        ctx.save();
+        ctx.globalAlpha = this.alpha;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = this.color;
+        ctx.fill();
+        ctx.restore();
+      }
+
+      explode() {
+        for (let i = 0; i < 35; i++) {
+          particles.push(new Particle(this.x, this.y, false));
+        }
+      }
+    }
+
+    // INSTANT INITIAL EXPLOSION (0th Second Burst)
+    for (let i = 0; i < 8; i++) {
+      particles.push(new Particle(Math.random() * w, h, true));
+    }
+
+    function render() {
+      ctx.fillStyle = 'rgba(3, 7, 18, 0.25)';
+      ctx.fillRect(0, 0, w, h);
+
+      // Rapid rocket creation
+      if (Math.random() < 0.18) {
+        particles.push(new Particle(Math.random() * w, h, true));
+      }
+
+      for (let i = particles.length - 1; i >= 0; i--) {
+        particles[i].draw();
+        if (particles[i].update()) {
+          particles.splice(i, 1);
+        }
+      }
+
+      requestAnimationFrame(render);
+    }
+    render();
+
+    // Scroll Reveal for Stats Section
+    const statsSec = document.getElementById('statsSec');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          statsSec.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.15 });
+
+    observer.observe(statsSec);
+
+    // Dynamic Live Ticking Clock for Seconds
+    let baseSecs = 504921600;
+    setInterval(() => {
+      baseSecs++;
+      document.getElementById('valSecs').innerText = baseSecs.toLocaleString();
+    }, 1000);
+
+    // Touch Interactive Fireworks
+    window.addEventListener('touchstart', (e) => {
+      const t = e.touches[0];
+      for (let i = 0; i < 25; i++) {
+        particles.push(new Particle(t.clientX, t.clientY, false));
+      }
+    });
+  </script>
+</body>
+</html>
